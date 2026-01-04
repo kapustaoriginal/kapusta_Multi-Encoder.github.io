@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kapusta Multi-Encoder Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code&display=swap');
+        body { background-color: #0f172a; color: #f1f5f9; font-family: 'Inter', sans-serif; }
+        .mono { font-family: 'Fira Code', monospace; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        select option { background: #1e293b; color: white; }
+        textarea::-webkit-scrollbar { width: 8px; }
+        textarea::-webkit-scrollbar-track { background: transparent; }
+        textarea::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        
+        @keyframes shimmer {
+            100% { transform: translateX(100%); }
+        }
+        .animate-shimmer { animation: shimmer 1.5s infinite; }
+        .hidden-option { display: none !important; }
+        
+        #methodInfo {
+            transition: all 0.3s ease;
+            min-height: 80px;
+        }
+        .copy-btn {
+            transition: all 0.2s;
+        }
+        .copy-btn:active {
+            transform: scale(0.9);
+            color: #fff;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="glass w-full max-w-5xl p-6 md:p-10 rounded-3xl shadow-2xl transition-all duration-500">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-extrabold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Text Converter Pro
+            </h1>
+            <p class="text-slate-400 mt-2 text-sm uppercase tracking-widest font-semibold italic">Secure & Custom Algorithms</p>
+        </header>
+        
+        <div class="space-y-6">
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Поиск и Метод -->
+                <div class="space-y-4">
+                    <div class="relative">
+                        <label class="block text-xs font-bold text-blue-400 uppercase tracking-widest mb-2 ml-1">Поиск алгоритма</label>
+                        <input type="text" id="methodSearch" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm" placeholder="Начните вводить название...">
+                    </div>
+                    
+                    <div class="group">
+                        <label class="block text-xs font-bold text-purple-400 uppercase tracking-widest mb-2 ml-1">Метод преобразования</label>
+                        <select id="methodSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white outline-none focus:ring-2 focus:ring-purple-500 transition-all cursor-pointer">
+                            <optgroup label="Криптография">
+                                <option value="aes" selected>🔐 AES-256 (Пароль)</option>
+                                <option value="caesar">🏛️ Caesar (Цезарь)</option>
+                                <option value="atbash">↔️ Atbash (Атбаш)</option>
+                                <option value="rot13">🔄 ROT-13</option>
+                                <option value="md5">MD5 (Хеш)</option>
+                                <option value="sha1">SHA-1 (Хеш)</option>
+                                <option value="sha256">SHA-256 (Хеш)</option>
+                                <option value="sha384">SHA-384 (Хеш)</option>
+                                <option value="sha512">SHA-512 (Хеш)</option>
+                            </optgroup>
+                            <optgroup label="Текстовые эффекты">
+                                <option value="reverser">⏪ Reverser (Наоборот)</option>
+                                <option value="uppercase">ABC Upper Case</option>
+                                <option value="lowercase">abc Lower Case</option>
+                                <option value="randomcase">rAnDoM Case</option>
+                                <option value="upsidedown">🙃 Upside Down</option>
+                                <option value="superscript">ᴬᴮᶜ SuperScript</option>
+                                <option value="subscript">ₐ₆꜀ SubScript</option>
+                            </optgroup>
+                            <optgroup label="Zalgo (Глюки)">
+                                <option value="zalgo_mini">👻 Zalgo Mini</option>
+                                <option value="zalgo_normal">👹 Zalgo Normal</option>
+                                <option value="zalgo_big">💀 Zalgo Big</option>
+                            </optgroup>
+                            <optgroup label="Спец. Коды">
+                                <option value="morse">📡 Morse Code (Морзе)</option>
+                                <option value="nato">✈️ NATO Alphabet (Нато)</option>
+                                <option value="wingding">✌️ Wingdings (Виндзинг)</option>
+                            </optgroup>
+                            <optgroup label="Системные / Веб">
+                                <option value="octal">8️⃣ Octal (Восьмеричная)</option>
+                                <option value="html">🌐 HTML Entity</option>
+                                <option value="url">🔗 URL Encoding</option>
+                                <option value="unicode">🔡 Unicode (\uXXXX)</option>
+                                <option value="base64">📄 BASE64</option>
+                                <option value="hex">1️⃣6️⃣ HEX (Шестнадцатеричная)</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Пароль / Настройка -->
+                <div id="passwordContainer" class="transition-all duration-300 flex flex-col justify-end">
+                    <label id="keyLabel" class="block text-xs font-bold text-pink-400 uppercase tracking-widest mb-2 ml-1">Секретный ключ / Сдвиг</label>
+                    <input type="text" id="cipherPassword" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white outline-none focus:ring-2 focus:ring-pink-500 transition-all" placeholder="Ключ или число...">
+                </div>
+            </div>
+
+            <!-- Блок информации -->
+            <div id="methodInfo" class="p-4 bg-slate-800/40 border border-slate-700/50 rounded-2xl border-l-4 border-l-blue-500">
+                <h4 id="infoTitle" class="text-blue-400 font-bold text-xs uppercase mb-1">Справка об алгоритме</h4>
+                <p id="infoText" class="text-[13px] text-slate-300 leading-relaxed italic">Выберите алгоритм для просмотра описания.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Текст -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center px-1">
+                        <label class="block text-xs font-bold text-blue-400 uppercase tracking-widest">Исходные данные</label>
+                        <button onclick="copyToClipboard('plainText')" class="copy-btn text-blue-400 hover:text-white flex items-center gap-1 text-[10px] font-bold uppercase">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="Wait 8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+                            Копировать
+                        </button>
+                    </div>
+                    <textarea id="plainText" rows="8" class="w-full bg-slate-900/50 border border-slate-700 rounded-2xl p-4 text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none shadow-inner" placeholder="Введите текст (можно на русском или английском)..."></textarea>
+                </div>
+
+                <!-- Результат -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center px-1">
+                        <label class="block text-xs font-bold text-emerald-400 uppercase tracking-widest">Результат</label>
+                        <button onclick="copyToClipboard('resultText')" class="copy-btn text-emerald-400 hover:text-white flex items-center gap-1 text-[10px] font-bold uppercase">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="Wait 8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+                            Копировать
+                        </button>
+                    </div>
+                    <textarea id="resultText" rows="8" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-emerald-400 mono text-sm focus:ring-2 focus:ring-emerald-500 outline-none transition-all resize-none shadow-inner" placeholder="Результат..."></textarea>
+                </div>
+            </div>
+
+            <!-- Действия -->
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="handleAction('encode')" class="group relative bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-bold transition-all active:scale-95 shadow-lg overflow-hidden">
+                    <span class="relative z-10">Кодировать</span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
+                </button>
+                <button id="decodeBtn" onclick="handleAction('decode')" class="bg-slate-700 hover:bg-slate-600 py-4 rounded-2xl font-bold transition-all active:scale-95 border border-slate-600 shadow-lg">
+                    Декодировать
+                </button>
+            </div>
+
+            <div class="flex justify-between items-center text-[11px] px-2 font-medium">
+                <button onclick="clearFields()" class="text-red-400 hover:text-red-300 transition-colors uppercase tracking-tighter">Очистить всё</button>
+                <div class="flex items-center gap-3">
+                    <div class="bg-slate-800/80 border border-slate-700 px-3 py-1 rounded-lg text-blue-300 font-mono">
+                        Create by: kapusta_original
+                    </div>
+                    <div id="statusLabel" class="text-slate-500 italic bg-slate-800/50 px-3 py-1 rounded-full uppercase tracking-widest">Ожидание</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Внешняя библиотека для MD5 (т.к. в Web Crypto API его часто нет) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
+
+    <script>
+        // База описаний алгоритмов
+        const METHOD_DOCS = {
+            'aes': 'Асимметричное шифрование AES-256 GCM. Высочайшая степень защиты. Без пароля расшифровка невозможна.',
+            'caesar': 'Шифр Цезаря — классический шифр подстановки со сдвигом по алфавиту. Поддерживает RU/EN.',
+            'atbash': 'Шифр Атбаш — зеркальный шифр (А->Я, B->Y). Не требует ключа. Поддерживает RU/EN.',
+            'rot13': 'ROT13 — сдвиг на 13 позиций. Только для латиницы.',
+            'md5': 'MD5 — популярная 128-битная хеш-функция. Необратима.',
+            'sha1': 'SHA-1 — хеш-функция, создающая 160-битный отпечаток.',
+            'sha256': 'SHA-256 — криптографическая хеш-функция. Очень надежна.',
+            'sha384': 'SHA-384 — вариант SHA-2 с более длинным результатом.',
+            'sha512': 'SHA-512 — один из самых мощных алгоритмов хеширования.',
+            'reverser': 'Зеркальное отображение строки. Поддерживает любые языки.',
+            'upsidedown': 'Перевернутый текст с использованием Юникода.',
+            'zalgo_mini': 'Zalgo — эффект "глючного" текста диакритическими знаками.',
+            'morse': 'Азбука Морзе. Поддерживает кириллицу (Русский) и латиницу (English).',
+            'nato': 'Фонетический алфавит ИКАО (Alpha, Bravo...). Только для латиницы.',
+            'base64': 'Кодирование бинарных данных в ASCII текст. Поддерживает RU.',
+            'hex': 'Шестнадцатеричное представление байтов.',
+            'unicode': 'Юникод кодировка (\\uXXXX).',
+            'html': 'Экранирование спецсимволов HTML.',
+            'url': 'URL Encoding (Percent-encoding).',
+            'octal': 'Восьмеричная система счисления.',
+            'wingding': 'Замена букв на символы Wingdings.'
+        };
+
+        // --- Словари данных ---
+        const MORSE = {
+            'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.', 'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.', 'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-', 'Y': '-.--', 'Z': '--..',
+            'А': '.-', 'Б': '-...', 'В': '.--', 'Г': '--.', 'Д': '-..', 'Е': '.', 'Ё': '.', 'Ж': '...-', 'З': '--..', 'И': '..', 'Й': '.---', 'К': '-.-', 'Л': '.-..', 'М': '--', 'Н': '-.', 'О': '---', 'П': '.--.', 'Р': '.-.', 'С': '...', 'T': '-', 'У': '..-', 'Ф': '..-.', 'Х': '....', 'Ц': '-.-.', 'Ч': '---.', 'Ш': '----', 'Щ': '--.-', 'Ъ': '--.--', 'Ы': '-.--', 'Ь': '-..-', 'Э': '..-..', 'Ю': '..--', 'Я': '.-.-',
+            '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.', '0': '-----',
+            '.': '......', ',': '.-.-.-', '?': '..--..', '!': '--..--', ':': '---...', ';': '-.-.-.', '(': '-.--.', ')': '-.--.-', '-': '-....-', '+': '.-.-.', '/': '-..-.', '=': '-...-', '@': '.--.-.', ' ': '/'
+        };
+        const NATO = {'A':'Alpha','B':'Bravo','C':'Charlie','D':'Delta','E':'Echo','F':'Foxtrot','G':'Golf','H':'Hotel','I':'India','J':'Juliet','K':'Kilo','L':'Lima','M':'Mike','N':'November','O':'Oscar','P':'Papa','Q':'Quebec','R':'Romeo','S':'Sierra','T':'Tango','U':'Uniform','V':'Victor','W':'Whiskey','X':'X-ray','Y':'Yankee','Z':'Zulu'};
+        const UPSIDE = {'a':'ɐ','b':'q','c':'ɔ','d':'p','e':'ǝ','f':'ɟ','g':'ƃ','h':'ɥ','i':'ᴉ','j':'ɾ','k':'ʞ','l':'l','m':'ɯ','n':'u','o':'o','p':'d','q':'b','r':'ɹ','s':'s','t':'ʇ','u':'n','v':'ʌ','w':'ʍ','x':'x','y':'ʎ','z':'z','A':'∀','B':'ᗺ','C':'Ɔ','D':'ᗡ','E':'Ǝ','F':'Ⅎ','G':'⅁','H':'H','I':'I','J':'ſ','K':'⋊','L':'˥','M':'W','N':'N','O':'O','P':'Ԁ','Q':'Ό','R':'ᴚ','S':'S','T':'⊥','U':'∩','V':'Λ','W':'M','X':'X','Y':'⅄','Z':'Z','1':'Ɩ','2':'ᄅ','3':'Ɛ','4':'ㄣ','5':'ϛ','6':'9','7':'ㄥ','8':'8','9':'6','0':'0','.':'˙',',':"'",'?':'¿','!':'¡',"'":',','"':'„','(':')',')':'(','[':']',']':'[','{':'}','}':'{','<':'>','>':'<','_':'‾'};
+        const SUPERSCRIPT = {'a':'ᵃ','b':'ᵇ','c':'ᶜ','d':'ᵈ','e':'ᵉ','f':'ᶠ','g':'ᵍ','h':'ʰ','i':'ⁱ','j':'ʲ','k':'ᵏ','l':'ˡ','m':'ᵐ','n':'ⁿ','o':'ᵒ','p':'ᵖ','r':'ʳ','s':'ˢ','t':'ᵗ','u':'ᵘ','v':'ᵛ','w':'ʷ','x':'ˣ','y':'ʸ','z':'ᶻ','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','+':'⁺','-':'⁻','=':'⁼','(':'⁽',')':'⁾'};
+        const SUBSCRIPT = {'a':'ₐ','e':'ₑ','h':'ₕ','i':'ᵢ','j':'ⱼ','k':'ₖ','l':'ₗ','m':'ₘ','n':'ₙ','o':'ₒ','p':'ₚ','r':'ᵣ','s':'ₛ','t':'ₜ','u':'ᵤ','v':'ᵥ','x':'ₓ','0':'₀','1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉','+':'₊','-':'₋','=':'₌','(':'₍',')':'₎'};
+        const WINGDINGS = {'a':'♋','b':'♌','c':'♍','d':'♎','e':'♏','f':'♐','g':'♑','h':'♒','i':'♓','j':'🙰','k':'🙱','l':'●','m':'❍','n':'■','o':'□','p':'❑','q':'❒','r':'⬧','s':'⧫','t':'◆','u':'❖','v':'⬪','w':'⌧','x':'⍼','y':'⌘','z':'✇','A':'✌','B':'👌','C':'👍','D':'👎','E':'👈','F':'👉','G':'👆','H':'👇','I':'☝','J':'☺','K':'😐','L':'☹','M':'💣','N':'☠','O':'🏳','P':'🏴','Q':'🔔','R':'📯','S':'⌛','T':'⏳','U':'✟','V':'☪','W':'✡','X':'☸','Y':'☯','Z':'☦'};
+
+        // --- Копирование ---
+        function copyToClipboard(elementId) {
+            const el = document.getElementById(elementId);
+            el.select();
+            el.setSelectionRange(0, 99999);
+            try {
+                document.execCommand('copy');
+                updateStatus("Скопировано!");
+            } catch (err) {
+                updateStatus("Ошибка копирования", true);
+            }
+        }
+
+        // --- Шифрование AES ---
+        const AES_CRYPTO = {
+            async deriveKey(password, salt) {
+                const enc = new TextEncoder();
+                const keyMaterial = await crypto.subtle.importKey("raw", enc.encode(password || "default"), "PBKDF2", false, ["deriveKey"]);
+                return crypto.subtle.deriveKey({ name: "PBKDF2", salt, iterations: 100000, hash: "SHA-256" }, keyMaterial, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+            },
+            async encrypt(text, password) {
+                const enc = new TextEncoder();
+                const salt = crypto.getRandomValues(new Uint8Array(16));
+                const iv = crypto.getRandomValues(new Uint8Array(12));
+                const key = await this.deriveKey(password, salt);
+                const encrypted = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, enc.encode(text));
+                const combined = new Uint8Array(salt.length + iv.length + encrypted.byteLength);
+                combined.set(salt, 0); combined.set(iv, 16); combined.set(new Uint8Array(encrypted), 28);
+                return btoa(String.fromCharCode(...combined));
+            },
+            async decrypt(b64, password) {
+                const data = new Uint8Array([...atob(b64)].map(c => c.charCodeAt(0)));
+                const key = await this.deriveKey(password, data.slice(0, 16));
+                const decrypted = await crypto.subtle.decrypt({ name: "AES-GCM", iv: data.slice(16, 28) }, key, data.slice(28));
+                return new TextDecoder().decode(decrypted);
+            }
+        };
+
+        // --- Хеширование ---
+        async function hashText(algo, text) {
+            if (algo === 'md5') return md5(text);
+            const msgUint8 = new TextEncoder().encode(text);
+            const hashBuffer = await crypto.subtle.digest(algo.toUpperCase().replace('SHA', 'SHA-'), msgUint8);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        const ZALGO_CHARS = ['\u030d', '\u030e', '\u0304', '\u0305', '\u033f', '\u0311', '\u0306', '\u0310', '\u0352', '\u033c', '\u0344', '\u034a', '\u034b', '\u034c', '\u0300', '\u0301', '\u0302', '\u0303', '\u0307', '\u0308', '\u0309', '\u030a', '\u030b', '\u030c', '\u030e', '\u0311', '\u0312', '\u0313', '\u0314', '\u031a', '\u031b', '\u0340', '\u0341', '\u0343', '\u0344', '\u0346', '\u034d', '\u034e', '\u0350', '\u0351', '\u0357', '\u0358', '\u0363', '\u0364', '\u0365', '\u0366', '\u0367', '\u0368', '\u0369', '\u036a', '\u036b', '\u036c', '\u036d', '\u036e', '\u036f'];
+        function makeZalgo(text, level) {
+            let result = "";
+            for(let char of text) {
+                result += char;
+                for(let i=0; i<level; i++) result += ZALGO_CHARS[Math.floor(Math.random() * ZALGO_CHARS.length)];
+            }
+            return result;
+        }
+
+        // --- Логика поиска ---
+        const searchInput = document.getElementById('methodSearch');
+        const methodSelect = document.getElementById('methodSelect');
+        const optGroups = methodSelect.querySelectorAll('optgroup');
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            let firstVisible = null;
+
+            optGroups.forEach(group => {
+                let hasVisible = false;
+                Array.from(group.querySelectorAll('option')).forEach(opt => {
+                    const matches = opt.textContent.toLowerCase().includes(term);
+                    if (matches) {
+                        opt.classList.remove('hidden-option');
+                        hasVisible = true;
+                        if (!firstVisible) firstVisible = opt;
+                    } else {
+                        opt.classList.add('hidden-option');
+                    }
+                });
+                group.style.display = hasVisible ? '' : 'none';
+            });
+
+            if (firstVisible && methodSelect.selectedOptions[0].classList.contains('hidden-option')) {
+                methodSelect.value = firstVisible.value;
+                methodSelect.dispatchEvent(new Event('change'));
+            }
+        });
+
+        // --- Обработчик выбора ---
+        methodSelect.addEventListener('change', function() {
+            const val = this.value;
+            const keyLabel = document.getElementById('keyLabel');
+            const passCont = document.getElementById('passwordContainer');
+            const infoText = document.getElementById('infoText');
+            const infoTitle = document.getElementById('infoTitle');
+            const decodeBtn = document.getElementById('decodeBtn');
+
+            const needsKey = (val === 'aes' || val === 'caesar');
+            if (needsKey) {
+                keyLabel.innerText = val === 'aes' ? "Секретный пароль" : "Сдвиг (число)";
+                passCont.style.opacity = "1";
+                passCont.style.pointerEvents = "auto";
+                passCont.classList.remove('grayscale');
+            } else {
+                passCont.style.opacity = "0.4";
+                passCont.style.pointerEvents = "none";
+                passCont.classList.add('grayscale');
+            }
+
+            const selectedText = this.options[this.selectedIndex].text;
+            infoTitle.innerText = `О методе: ${selectedText}`;
+            infoText.innerText = METHOD_DOCS[val] || "Описание для этого метода уточняется.";
+            
+            const irrev = ['md5', 'sha1', 'sha256', 'sha384', 'sha512', 'zalgo_mini', 'zalgo_normal', 'zalgo_big'];
+            if (irrev.includes(val)) {
+                decodeBtn.style.opacity = "0.5";
+                decodeBtn.style.pointerEvents = "none";
+            } else {
+                decodeBtn.style.opacity = "1";
+                decodeBtn.style.pointerEvents = "auto";
+            }
+        });
+
+        // --- Основная логика ---
+        async function handleAction(type) {
+            const method = methodSelect.value;
+            const key = document.getElementById('cipherPassword').value;
+            const plainArea = document.getElementById('plainText');
+            const resultArea = document.getElementById('resultText');
+            
+            try {
+                if (type === 'encode') {
+                    const input = plainArea.value;
+                    if(!input) return;
+                    let res = "";
+
+                    switch(method) {
+                        case 'aes': res = await AES_CRYPTO.encrypt(input, key); break;
+                        case 'md5':
+                        case 'sha1':
+                        case 'sha256':
+                        case 'sha384':
+                        case 'sha512': res = await hashText(method, input); break;
+                        case 'caesar': 
+                            const s = parseInt(key) || 3;
+                            res = input.replace(/[a-zа-яё]/gi, c => {
+                                const code = c.charCodeAt(0);
+                                if (code >= 65 && code <= 90) return String.fromCharCode((code - 65 + s) % 26 + 65);
+                                if (code >= 97 && code <= 122) return String.fromCharCode((code - 97 + s) % 26 + 97);
+                                if (code >= 1040 && code <= 1071) return String.fromCharCode((code - 1040 + s) % 32 + 1040);
+                                if (code >= 1072 && code <= 1103) return String.fromCharCode((code - 1072 + s) % 32 + 1072);
+                                return c;
+                            });
+                            break;
+                        case 'atbash': 
+                            res = input.replace(/[a-zа-яё]/gi, c => {
+                                const code = c.charCodeAt(0);
+                                if (code >= 65 && code <= 90) return String.fromCharCode(155 - code);
+                                if (code >= 97 && code <= 122) return String.fromCharCode(219 - code);
+                                if (code >= 1040 && code <= 1071) return String.fromCharCode(2111 - code);
+                                if (code >= 1072 && code <= 1103) return String.fromCharCode(2175 - code);
+                                return c;
+                            });
+                            break;
+                        case 'rot13': res = input.replace(/[a-z]/gi, c => String.fromCharCode((c.charCodeAt(0) - (c < 'a' ? 65 : 97) + 13) % 26 + (c < 'a' ? 65 : 97))); break;
+                        case 'reverser': res = input.split('').reverse().join(''); break;
+                        case 'uppercase': res = input.toUpperCase(); break;
+                        case 'lowercase': res = input.toLowerCase(); break;
+                        case 'randomcase': res = input.split('').map(c => Math.random() > 0.5 ? c.toUpperCase() : c.toLowerCase()).join(''); break;
+                        case 'upsidedown': res = input.split('').reverse().map(c => UPSIDE[c] || c).join(''); break;
+                        case 'superscript': res = input.split('').map(c => SUPERSCRIPT[c.toLowerCase()] || c).join(''); break;
+                        case 'subscript': res = input.split('').map(c => SUBSCRIPT[c.toLowerCase()] || c).join(''); break;
+                        case 'zalgo_mini': res = makeZalgo(input, 2); break;
+                        case 'zalgo_normal': res = makeZalgo(input, 5); break;
+                        case 'zalgo_big': res = makeZalgo(input, 15); break;
+                        case 'morse': 
+                            res = input.toUpperCase().split('').map(c => MORSE[c] || '').filter(x => x !== '').join(' '); 
+                            break;
+                        case 'nato': res = input.toUpperCase().split('').map(c => NATO[c] || c).join(' '); break;
+                        case 'wingding': res = input.split('').map(c => WINGDINGS[c] || c).join(''); break;
+                        case 'octal': res = Array.from(new TextEncoder().encode(input)).map(b => b.toString(8).padStart(3, '0')).join(' '); break;
+                        case 'html': res = input.replace(/[\u00A0-\u9999<>\&]/g, i => '&#' + i.charCodeAt(0) + ';'); break;
+                        case 'url': res = encodeURIComponent(input); break;
+                        case 'unicode': res = input.split('').map(c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0')).join(''); break;
+                        case 'base64': res = btoa(unescape(encodeURIComponent(input))); break;
+                        case 'hex': res = Array.from(new TextEncoder().encode(input)).map(b => b.toString(16).padStart(2, '0')).join(''); break;
+                    }
+                    resultArea.value = res;
+                } else {
+                    const input = resultArea.value;
+                    if(!input) return;
+                    let res = "";
+
+                    switch(method) {
+                        case 'aes': res = await AES_CRYPTO.decrypt(input, key); break;
+                        case 'caesar': 
+                            const s = parseInt(key) || 3;
+                            res = input.replace(/[a-zа-яё]/gi, c => {
+                                const code = c.charCodeAt(0);
+                                if (code >= 65 && code <= 90) return String.fromCharCode((code - 65 - s + 260) % 26 + 65);
+                                if (code >= 97 && code <= 122) return String.fromCharCode((code - 97 - s + 260) % 26 + 97);
+                                if (code >= 1040 && code <= 1071) return String.fromCharCode((code - 1040 - s + 320) % 32 + 1040);
+                                if (code >= 1072 && code <= 1103) return String.fromCharCode((code - 1072 - s + 320) % 32 + 1072);
+                                return c;
+                            });
+                            break;
+                        case 'atbash': 
+                             res = input.replace(/[a-zа-яё]/gi, c => {
+                                const code = c.charCodeAt(0);
+                                if (code >= 65 && code <= 90) return String.fromCharCode(155 - code);
+                                if (code >= 97 && code <= 122) return String.fromCharCode(219 - code);
+                                if (code >= 1040 && code <= 1071) return String.fromCharCode(2111 - code);
+                                if (code >= 1072 && code <= 1103) return String.fromCharCode(2175 - code);
+                                return c;
+                            });
+                            break;
+                        case 'rot13': res = input.replace(/[a-z]/gi, c => String.fromCharCode((c.charCodeAt(0) - (c < 'a' ? 65 : 97) + 13) % 26 + (c < 'a' ? 65 : 97))); break;
+                        case 'reverser': res = input.split('').reverse().join(''); break;
+                        case 'upsidedown': 
+                            const invUpside = Object.fromEntries(Object.entries(UPSIDE).map(a => a.reverse()));
+                            res = input.split('').reverse().map(c => invUpside[c] || c).join('');
+                            break;
+                        case 'morse': 
+                            const invMorse = Object.fromEntries(Object.entries(MORSE).map(a => a.reverse()));
+                            res = input.split(' ').map(c => invMorse[c] || '').join('');
+                            break;
+                        case 'nato':
+                            const invNato = Object.fromEntries(Object.entries(NATO).map(a => [a[1].toUpperCase(), a[0]]));
+                            res = input.toUpperCase().split(' ').map(c => invNato[c] || '').join('');
+                            break;
+                        case 'wingding':
+                            const invWing = Object.fromEntries(Object.entries(WINGDINGS).map(a => a.reverse()));
+                            res = input.split('').map(c => invWing[c] || c).join('');
+                            break;
+                        case 'octal': res = new TextDecoder().decode(new Uint8Array(input.split(' ').filter(x => x).map(o => parseInt(o, 8)))); break;
+                        case 'html': const t = document.createElement("textarea"); t.innerHTML = input; res = t.value; break;
+                        case 'url': res = decodeURIComponent(input); break;
+                        case 'unicode': res = input.replace(/\\u([a-fA-F0-9]{4})/g, (g, m) => String.fromCharCode(parseInt(m, 16))); break;
+                        case 'base64': res = decodeURIComponent(escape(atob(input))); break;
+                        case 'hex': res = new TextDecoder().decode(new Uint8Array(input.match(/.{1,2}/g).map(b => parseInt(b, 16)))); break;
+                        default: res = "Метод необратим или не поддерживается.";
+                    }
+                    plainArea.value = res;
+                }
+                updateStatus("Успех");
+            } catch(e) {
+                updateStatus("Ошибка", true);
+            }
+        }
+
+        function updateStatus(msg, err = false) {
+            const s = document.getElementById('statusLabel');
+            s.innerText = msg;
+            s.className = err ? "text-red-400 italic bg-red-900/20 px-3 py-1 rounded-full" : "text-emerald-400 italic bg-emerald-900/20 px-3 py-1 rounded-full";
+            setTimeout(() => {
+                s.innerText = "Ожидание";
+                s.className = "text-slate-500 italic bg-slate-800/50 px-3 py-1 rounded-full";
+            }, 2000);
+        }
+
+        function clearFields() {
+            document.querySelectorAll('textarea').forEach(t => t.value = "");
+            document.getElementById('cipherPassword').value = "";
+        }
+
+        window.onload = () => methodSelect.dispatchEvent(new Event('change'));
+    </script>
+</body>
+</html>
