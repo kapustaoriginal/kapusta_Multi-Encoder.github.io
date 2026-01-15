@@ -87,6 +87,7 @@
                                 <option value="wingding">✌️ Wingdings (Виндзинг)</option>
                             </optgroup>
                             <optgroup label="Системные / Веб">
+                                <option value="binary">0101 Binary (Двоичный)</option>
                                 <option value="octal">8️⃣ Octal (Восьмеричная)</option>
                                 <option value="html">🌐 HTML Entity</option>
                                 <option value="url">🔗 URL Encoding</option>
@@ -186,6 +187,7 @@
             'html': 'Экранирование спецсимволов HTML.',
             'url': 'URL Encoding (Percent-encoding).',
             'octal': 'Восьмеричная система счисления.',
+            'binary': 'Двоичный код. Представление текста в виде последовательности нулей и единиц (8 бит на символ).',
             'wingding': 'Замена букв на символы Wingdings.'
         };
 
@@ -382,6 +384,7 @@
                         case 'nato': res = input.toUpperCase().split('').map(c => NATO[c] || c).join(' '); break;
                         case 'wingding': res = input.split('').map(c => WINGDINGS[c] || c).join(''); break;
                         case 'octal': res = Array.from(new TextEncoder().encode(input)).map(b => b.toString(8).padStart(3, '0')).join(' '); break;
+                        case 'binary': res = Array.from(new TextEncoder().encode(input)).map(b => b.toString(2).padStart(8, '0')).join(' '); break;
                         case 'html': res = input.replace(/[\u00A0-\u9999<>\&]/g, i => '&#' + i.charCodeAt(0) + ';'); break;
                         case 'url': res = encodeURIComponent(input); break;
                         case 'unicode': res = input.split('').map(c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0')).join(''); break;
@@ -436,6 +439,7 @@
                             res = input.split('').map(c => invWing[c] || c).join('');
                             break;
                         case 'octal': res = new TextDecoder().decode(new Uint8Array(input.split(' ').filter(x => x).map(o => parseInt(o, 8)))); break;
+                        case 'binary': res = new TextDecoder().decode(new Uint8Array(input.split(' ').filter(x => x).map(o => parseInt(o, 2)))); break;
                         case 'html': const t = document.createElement("textarea"); t.innerHTML = input; res = t.value; break;
                         case 'url': res = decodeURIComponent(input); break;
                         case 'unicode': res = input.replace(/\\u([a-fA-F0-9]{4})/g, (g, m) => String.fromCharCode(parseInt(m, 16))); break;
