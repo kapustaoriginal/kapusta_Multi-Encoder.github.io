@@ -22,15 +22,12 @@
         .hidden-option { display: none !important; }
         
         #methodInfo {
-            transition: all 0.3s ease;
-            min-height: 80px;
+            transition: all 0.3s ease; min-height: 80px;
         }
         .copy-btn {
-            transition: all 0.2s;
-        }
+            transition: all 0.2s; }
         .copy-btn:active {
-            transform: scale(0.9);
-            color: #fff;
+            transform: scale(0.9); color: #fff;
         }
     </style>
 </head>
@@ -46,13 +43,14 @@
         
         <div class="space-y-6">
             <div class="grid md:grid-cols-2 gap-6">
-                <!-- Поиск и Метод -->
                 <div class="space-y-4">
+                 
                     <div class="relative">
                         <label class="block text-xs font-bold text-blue-400 uppercase tracking-widest mb-2 ml-1">Поиск алгоритма</label>
                         <input type="text" id="methodSearch" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all text-sm" placeholder="Начните вводить название...">
                     </div>
-                    
+  
+                   
                     <div class="group">
                         <label class="block text-xs font-bold text-purple-400 uppercase tracking-widest mb-2 ml-1">Метод преобразования</label>
                         <select id="methodSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white outline-none focus:ring-2 focus:ring-purple-500 transition-all cursor-pointer">
@@ -67,6 +65,7 @@
                                 <option value="sha384">SHA-384 (Хеш)</option>
                                 <option value="sha512">SHA-512 (Хеш)</option>
                             </optgroup>
+                        
                             <optgroup label="Текстовые эффекты">
                                 <option value="reverser">⏪ Reverser (Наоборот)</option>
                                 <option value="uppercase">ABC Upper Case</option>
@@ -76,6 +75,7 @@
                                 <option value="superscript">ᴬᴮᶜ SuperScript</option>
                                 <option value="subscript">ₐ₆꜀ SubScript</option>
                             </optgroup>
+                        
                             <optgroup label="Zalgo (Глюки)">
                                 <option value="zalgo_mini">👻 Zalgo Mini</option>
                                 <option value="zalgo_normal">👹 Zalgo Normal</option>
@@ -87,11 +87,13 @@
                                 <option value="wingding">✌️ Wingdings (Виндзинг)</option>
                             </optgroup>
                             <optgroup label="Системные / Веб">
+                                <option value="ascii">🔤 ASCII Code (Десятичный)</option>
                                 <option value="binary">0101 Binary (Двоичный)</option>
                                 <option value="octal">8️⃣ Octal (Восьмеричная)</option>
                                 <option value="html">🌐 HTML Entity</option>
                                 <option value="url">🔗 URL Encoding</option>
                                 <option value="unicode">🔡 Unicode (\uXXXX)</option>
+                                <option value="base32">📄 BASE32</option>
                                 <option value="base64">📄 BASE64</option>
                                 <option value="hex">1️⃣6️⃣ HEX (Шестнадцатеричная)</option>
                             </optgroup>
@@ -99,22 +101,21 @@
                     </div>
                 </div>
 
-                <!-- Пароль / Настройка -->
+  
                 <div id="passwordContainer" class="transition-all duration-300 flex flex-col justify-end">
                     <label id="keyLabel" class="block text-xs font-bold text-pink-400 uppercase tracking-widest mb-2 ml-1">Секретный ключ / Сдвиг</label>
                     <input type="text" id="cipherPassword" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white outline-none focus:ring-2 focus:ring-pink-500 transition-all" placeholder="Ключ или число...">
                 </div>
             </div>
 
-            <!-- Блок информации -->
             <div id="methodInfo" class="p-4 bg-slate-800/40 border border-slate-700/50 rounded-2xl border-l-4 border-l-blue-500">
                 <h4 id="infoTitle" class="text-blue-400 font-bold text-xs uppercase mb-1">Справка об алгоритме</h4>
                 <p id="infoText" class="text-[13px] text-slate-300 leading-relaxed italic">Выберите алгоритм для просмотра описания.</p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
-                <!-- Текст -->
                 <div class="space-y-2">
+                  
                     <div class="flex justify-between items-center px-1">
                         <label class="block text-xs font-bold text-blue-400 uppercase tracking-widest">Исходные данные</label>
                         <button onclick="copyToClipboard('plainText')" class="copy-btn text-blue-400 hover:text-white flex items-center gap-1 text-[10px] font-bold uppercase">
@@ -125,7 +126,6 @@
                     <textarea id="plainText" rows="8" class="w-full bg-slate-900/50 border border-slate-700 rounded-2xl p-4 text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none shadow-inner" placeholder="Введите текст (можно на русском или английском)..."></textarea>
                 </div>
 
-                <!-- Результат -->
                 <div class="space-y-2">
                     <div class="flex justify-between items-center px-1">
                         <label class="block text-xs font-bold text-emerald-400 uppercase tracking-widest">Результат</label>
@@ -138,7 +138,6 @@
                 </div>
             </div>
 
-            <!-- Действия -->
             <div class="grid grid-cols-2 gap-4">
                 <button onclick="handleAction('encode')" class="group relative bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-bold transition-all active:scale-95 shadow-lg overflow-hidden">
                     <span class="relative z-10">Кодировать</span>
@@ -152,6 +151,7 @@
             <div class="flex justify-between items-center text-[11px] px-2 font-medium">
                 <button onclick="clearFields()" class="text-red-400 hover:text-red-300 transition-colors uppercase tracking-tighter">Очистить всё</button>
                 <div class="flex items-center gap-3">
+                   
                     <div class="bg-slate-800/80 border border-slate-700 px-3 py-1 rounded-lg text-blue-300 font-mono">
                         Create by: kapusta_original
                     </div>
@@ -161,7 +161,6 @@
         </div>
     </div>
 
-    <!-- Внешняя библиотека для MD5 (т.к. в Web Crypto API его часто нет) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
 
     <script>
@@ -181,6 +180,7 @@
             'zalgo_mini': 'Zalgo — эффект "глючного" текста диакритическими знаками.',
             'morse': 'Азбука Морзе. Поддерживает кириллицу (Русский) и латиницу (English).',
             'nato': 'Фонетический алфавит ИКАО (Alpha, Bravo...). Только для латиницы.',
+            'base32': 'Кодирование бинарных данных в строку Base32 (алфавит A-Z, 2-7).',
             'base64': 'Кодирование бинарных данных в ASCII текст. Поддерживает RU.',
             'hex': 'Шестнадцатеричное представление байтов.',
             'unicode': 'Юникод кодировка (\\uXXXX).',
@@ -188,7 +188,8 @@
             'url': 'URL Encoding (Percent-encoding).',
             'octal': 'Восьмеричная система счисления.',
             'binary': 'Двоичный код. Представление текста в виде последовательности нулей и единиц (8 бит на символ).',
-            'wingding': 'Замена букв на символы Wingdings.'
+            'wingding': 'Замена букв на символы Wingdings.',
+            'ascii': 'Преобразование текста в десятичные коды символов (ASCII/Unicode) и обратно.'
         };
 
         // --- Словари данных ---
@@ -203,6 +204,40 @@
         const SUPERSCRIPT = {'a':'ᵃ','b':'ᵇ','c':'ᶜ','d':'ᵈ','e':'ᵉ','f':'ᶠ','g':'ᵍ','h':'ʰ','i':'ⁱ','j':'ʲ','k':'ᵏ','l':'ˡ','m':'ᵐ','n':'ⁿ','o':'ᵒ','p':'ᵖ','r':'ʳ','s':'ˢ','t':'ᵗ','u':'ᵘ','v':'ᵛ','w':'ʷ','x':'ˣ','y':'ʸ','z':'ᶻ','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','+':'⁺','-':'⁻','=':'⁼','(':'⁽',')':'⁾'};
         const SUBSCRIPT = {'a':'ₐ','e':'ₑ','h':'ₕ','i':'ᵢ','j':'ⱼ','k':'ₖ','l':'ₗ','m':'ₘ','n':'ₙ','o':'ₒ','p':'ₚ','r':'ᵣ','s':'ₛ','t':'ₜ','u':'ᵤ','v':'ᵥ','x':'ₓ','0':'₀','1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉','+':'₊','-':'₋','=':'₌','(':'₍',')':'₎'};
         const WINGDINGS = {'a':'♋','b':'♌','c':'♍','d':'♎','e':'♏','f':'♐','g':'♑','h':'♒','i':'♓','j':'🙰','k':'🙱','l':'●','m':'❍','n':'■','o':'□','p':'❑','q':'❒','r':'⬧','s':'⧫','t':'◆','u':'❖','v':'⬪','w':'⌧','x':'⍼','y':'⌘','z':'✇','A':'✌','B':'👌','C':'👍','D':'👎','E':'👈','F':'👉','G':'👆','H':'👇','I':'☝','J':'☺','K':'😐','L':'☹','M':'💣','N':'☠','O':'🏳','P':'🏴','Q':'🔔','R':'📯','S':'⌛','T':'⏳','U':'✟','V':'☪','W':'✡','X':'☸','Y':'☯','Z':'☦'};
+
+        // --- Вспомогательные функции для Base32 ---
+        const b32chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+        function encodeBase32(str) {
+            const bytes = new TextEncoder().encode(str);
+            let bits = 0, value = 0, output = '';
+            for (let i = 0; i < bytes.length; i++) {
+                value = (value << 8) | bytes[i];
+                bits += 8;
+                while (bits >= 5) {
+                    output += b32chars[(value >>> (bits - 5)) & 31];
+                    bits -= 5;
+                }
+            }
+            if (bits > 0) output += b32chars[(value << (5 - bits)) & 31];
+            while (output.length % 8 !== 0) output += '=';
+            return output;
+        }
+        function decodeBase32(str) {
+            str = str.replace(/=+$/, '').toUpperCase();
+            let bits = 0, value = 0, index = 0;
+            const bytes = new Uint8Array(str.length * 5 / 8 | 0);
+            for (let i = 0; i < str.length; i++) {
+                const val = b32chars.indexOf(str[i]);
+                if (val === -1) continue;
+                value = (value << 5) | val;
+                bits += 5;
+                if (bits >= 8) {
+                    bytes[index++] = (value >>> (bits - 8)) & 255;
+                    bits -= 8;
+                }
+            }
+            return new TextDecoder().decode(bytes.slice(0, index));
+        }
 
         // --- Копирование ---
         function copyToClipboard(elementId) {
@@ -241,7 +276,6 @@
                 return new TextDecoder().decode(decrypted);
             }
         };
-
         // --- Хеширование ---
         async function hashText(algo, text) {
             if (algo === 'md5') return md5(text);
@@ -273,15 +307,18 @@
             optGroups.forEach(group => {
                 let hasVisible = false;
                 Array.from(group.querySelectorAll('option')).forEach(opt => {
+        
                     const matches = opt.textContent.toLowerCase().includes(term);
                     if (matches) {
                         opt.classList.remove('hidden-option');
                         hasVisible = true;
+             
                         if (!firstVisible) firstVisible = opt;
                     } else {
                         opt.classList.add('hidden-option');
                     }
                 });
+   
                 group.style.display = hasVisible ? '' : 'none';
             });
 
@@ -298,12 +335,14 @@
             const passCont = document.getElementById('passwordContainer');
             const infoText = document.getElementById('infoText');
             const infoTitle = document.getElementById('infoTitle');
+  
             const decodeBtn = document.getElementById('decodeBtn');
 
             const needsKey = (val === 'aes' || val === 'caesar');
             if (needsKey) {
                 keyLabel.innerText = val === 'aes' ? "Секретный пароль" : "Сдвиг (число)";
                 passCont.style.opacity = "1";
+        
                 passCont.style.pointerEvents = "auto";
                 passCont.classList.remove('grayscale');
             } else {
@@ -315,7 +354,6 @@
             const selectedText = this.options[this.selectedIndex].text;
             infoTitle.innerText = `О методе: ${selectedText}`;
             infoText.innerText = METHOD_DOCS[val] || "Описание для этого метода уточняется.";
-            
             const irrev = ['md5', 'sha1', 'sha256', 'sha384', 'sha512', 'zalgo_mini', 'zalgo_normal', 'zalgo_big'];
             if (irrev.includes(val)) {
                 decodeBtn.style.opacity = "0.5";
@@ -325,14 +363,12 @@
                 decodeBtn.style.pointerEvents = "auto";
             }
         });
-
         // --- Основная логика ---
         async function handleAction(type) {
             const method = methodSelect.value;
             const key = document.getElementById('cipherPassword').value;
             const plainArea = document.getElementById('plainText');
             const resultArea = document.getElementById('resultText');
-            
             try {
                 if (type === 'encode') {
                     const input = plainArea.value;
@@ -340,19 +376,24 @@
                     let res = "";
 
                     switch(method) {
-                        case 'aes': res = await AES_CRYPTO.encrypt(input, key); break;
+                        case 'aes': res = await AES_CRYPTO.encrypt(input, key);
+                            break;
                         case 'md5':
                         case 'sha1':
                         case 'sha256':
                         case 'sha384':
+                       
                         case 'sha512': res = await hashText(method, input); break;
                         case 'caesar': 
-                            const s = parseInt(key) || 3;
+                            const s = parseInt(key) ||
+                                3;
                             res = input.replace(/[a-zа-яё]/gi, c => {
                                 const code = c.charCodeAt(0);
                                 if (code >= 65 && code <= 90) return String.fromCharCode((code - 65 + s) % 26 + 65);
+          
                                 if (code >= 97 && code <= 122) return String.fromCharCode((code - 97 + s) % 26 + 97);
                                 if (code >= 1040 && code <= 1071) return String.fromCharCode((code - 1040 + s) % 32 + 1040);
+            
                                 if (code >= 1072 && code <= 1103) return String.fromCharCode((code - 1072 + s) % 32 + 1072);
                                 return c;
                             });
@@ -360,14 +401,18 @@
                         case 'atbash': 
                             res = input.replace(/[a-zа-яё]/gi, c => {
                                 const code = c.charCodeAt(0);
+                             
                                 if (code >= 65 && code <= 90) return String.fromCharCode(155 - code);
                                 if (code >= 97 && code <= 122) return String.fromCharCode(219 - code);
-                                if (code >= 1040 && code <= 1071) return String.fromCharCode(2111 - code);
+                                if (code >= 1040 && code <= 1071) return String.fromCharCode(2111 - 
+                                code);
                                 if (code >= 1072 && code <= 1103) return String.fromCharCode(2175 - code);
                                 return c;
+                        
                             });
                             break;
-                        case 'rot13': res = input.replace(/[a-z]/gi, c => String.fromCharCode((c.charCodeAt(0) - (c < 'a' ? 65 : 97) + 13) % 26 + (c < 'a' ? 65 : 97))); break;
+                        case 'rot13': res = input.replace(/[a-z]/gi, c => String.fromCharCode((c.charCodeAt(0) - (c < 'a' ? 65 : 97) + 13) % 26 + (c < 'a' ? 65 : 97)));
+                            break;
                         case 'reverser': res = input.split('').reverse().join(''); break;
                         case 'uppercase': res = input.toUpperCase(); break;
                         case 'lowercase': res = input.toLowerCase(); break;
@@ -379,15 +424,18 @@
                         case 'zalgo_normal': res = makeZalgo(input, 5); break;
                         case 'zalgo_big': res = makeZalgo(input, 15); break;
                         case 'morse': 
-                            res = input.toUpperCase().split('').map(c => MORSE[c] || '').filter(x => x !== '').join(' '); 
+                            res = input.toUpperCase().split('').map(c => MORSE[c] || '').filter(x => x !== '').join(' ');
                             break;
                         case 'nato': res = input.toUpperCase().split('').map(c => NATO[c] || c).join(' '); break;
                         case 'wingding': res = input.split('').map(c => WINGDINGS[c] || c).join(''); break;
-                        case 'octal': res = Array.from(new TextEncoder().encode(input)).map(b => b.toString(8).padStart(3, '0')).join(' '); break;
+                        case 'ascii': res = input.split('').map(c => c.charCodeAt(0)).join(' '); break;
+                        case 'octal': res = Array.from(new TextEncoder().encode(input)).map(b => b.toString(8).padStart(3, '0')).join(' ');
+                            break;
                         case 'binary': res = Array.from(new TextEncoder().encode(input)).map(b => b.toString(2).padStart(8, '0')).join(' '); break;
                         case 'html': res = input.replace(/[\u00A0-\u9999<>\&]/g, i => '&#' + i.charCodeAt(0) + ';'); break;
                         case 'url': res = encodeURIComponent(input); break;
                         case 'unicode': res = input.split('').map(c => '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0')).join(''); break;
+                        case 'base32': res = encodeBase32(input); break;
                         case 'base64': res = btoa(unescape(encodeURIComponent(input))); break;
                         case 'hex': res = Array.from(new TextEncoder().encode(input)).map(b => b.toString(16).padStart(2, '0')).join(''); break;
                     }
@@ -398,29 +446,38 @@
                     let res = "";
 
                     switch(method) {
-                        case 'aes': res = await AES_CRYPTO.decrypt(input, key); break;
+                        case 'aes': res = await AES_CRYPTO.decrypt(input, key);
+                            break;
                         case 'caesar': 
-                            const s = parseInt(key) || 3;
+                            const s = parseInt(key) ||
+                                3;
                             res = input.replace(/[a-zа-яё]/gi, c => {
                                 const code = c.charCodeAt(0);
                                 if (code >= 65 && code <= 90) return String.fromCharCode((code - 65 - s + 260) % 26 + 65);
+        
                                 if (code >= 97 && code <= 122) return String.fromCharCode((code - 97 - s + 260) % 26 + 97);
                                 if (code >= 1040 && code <= 1071) return String.fromCharCode((code - 1040 - s + 320) % 32 + 1040);
+      
                                 if (code >= 1072 && code <= 1103) return String.fromCharCode((code - 1072 - s + 320) % 32 + 1072);
                                 return c;
+                      
                             });
                             break;
                         case 'atbash': 
                              res = input.replace(/[a-zа-яё]/gi, c => {
                                 const code = c.charCodeAt(0);
+                     
                                 if (code >= 65 && code <= 90) return String.fromCharCode(155 - code);
                                 if (code >= 97 && code <= 122) return String.fromCharCode(219 - code);
-                                if (code >= 1040 && code <= 1071) return String.fromCharCode(2111 - code);
+                                if (code >= 
+                                1040 && code <= 1071) return String.fromCharCode(2111 - code);
                                 if (code >= 1072 && code <= 1103) return String.fromCharCode(2175 - code);
                                 return c;
+                
                             });
                             break;
-                        case 'rot13': res = input.replace(/[a-z]/gi, c => String.fromCharCode((c.charCodeAt(0) - (c < 'a' ? 65 : 97) + 13) % 26 + (c < 'a' ? 65 : 97))); break;
+                        case 'rot13': res = input.replace(/[a-z]/gi, c => String.fromCharCode((c.charCodeAt(0) - (c < 'a' ? 65 : 97) + 13) % 26 + (c < 'a' ? 65 : 97)));
+                            break;
                         case 'reverser': res = input.split('').reverse().join(''); break;
                         case 'upsidedown': 
                             const invUpside = Object.fromEntries(Object.entries(UPSIDE).map(a => a.reverse()));
@@ -438,11 +495,16 @@
                             const invWing = Object.fromEntries(Object.entries(WINGDINGS).map(a => a.reverse()));
                             res = input.split('').map(c => invWing[c] || c).join('');
                             break;
-                        case 'octal': res = new TextDecoder().decode(new Uint8Array(input.split(' ').filter(x => x).map(o => parseInt(o, 8)))); break;
+                        case 'ascii': 
+                            res = input.split(' ').filter(x => x !== '').map(o => String.fromCharCode(parseInt(o))).join(''); 
+                            break;
+                        case 'octal': res = new TextDecoder().decode(new Uint8Array(input.split(' ').filter(x => x).map(o => parseInt(o, 8))));
+                            break;
                         case 'binary': res = new TextDecoder().decode(new Uint8Array(input.split(' ').filter(x => x).map(o => parseInt(o, 2)))); break;
                         case 'html': const t = document.createElement("textarea"); t.innerHTML = input; res = t.value; break;
                         case 'url': res = decodeURIComponent(input); break;
                         case 'unicode': res = input.replace(/\\u([a-fA-F0-9]{4})/g, (g, m) => String.fromCharCode(parseInt(m, 16))); break;
+                        case 'base32': res = decodeBase32(input); break;
                         case 'base64': res = decodeURIComponent(escape(atob(input))); break;
                         case 'hex': res = new TextDecoder().decode(new Uint8Array(input.match(/.{1,2}/g).map(b => parseInt(b, 16)))); break;
                         default: res = "Метод необратим или не поддерживается.";
